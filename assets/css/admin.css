@@ -1,0 +1,263 @@
+/**
+ * Admin Styles for Remote File Uploader for AI1WM
+ */
+
+.rfu-ai1wm-wrap {
+    margin: 20px 20px 0 0;
+}
+
+.rfu-ai1wm-container {
+    max-width: 1200px;
+    margin-top: 20px;
+}
+
+.rfu-ai1wm-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.rfu-ai1wm-card-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #ccd0d4;
+    background: #f9f9f9;
+}
+
+.rfu-ai1wm-card-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #23282d;
+}
+
+.rfu-ai1wm-card-body {
+    padding: 20px;
+}
+
+.rfu-ai1wm-card-body h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.rfu-ai1wm-card-body h3:first-child {
+    margin-top: 0;
+}
+
+.rfu-ai1wm-card-body ul,
+.rfu-ai1wm-card-body ol {
+    margin-left: 20px;
+}
+
+.rfu-ai1wm-card-body li {
+    margin-bottom: 8px;
+}
+
+.rfu-ai1wm-card-body code {
+    background: #f0f0f1;
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+.rfu-ai1wm-info-card {
+    background: #f0f6fc;
+    border-color: #c3e6ff;
+}
+
+.rfu-ai1wm-info-card .rfu-ai1wm-card-header {
+    background: #e5f2ff;
+    border-color: #c3e6ff;
+}
+
+/* Progress Bar Styles */
+.rfu-ai1wm-progress-container {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.rfu-ai1wm-progress-bar-wrapper {
+    margin-bottom: 15px;
+}
+
+.rfu-ai1wm-progress-bar {
+    width: 100%;
+    height: 30px;
+    background: #e0e0e0;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+}
+
+.rfu-ai1wm-progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2271b1 0%, #135e96 100%);
+    border-radius: 15px;
+    width: 0%;
+    transition: width 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.rfu-ai1wm-progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            rgba(255, 255, 255, 0) 100%);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.rfu-ai1wm-progress-text {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+.rfu-ai1wm-progress-percentage {
+    font-weight: 600;
+    color: #2271b1;
+}
+
+.rfu-ai1wm-progress-size {
+    font-family: monospace;
+}
+
+.rfu-ai1wm-progress-status {
+    margin: 10px 0 0 0;
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+}
+
+/* Technical Data Display */
+.rfu-ai1wm-technical-data {
+    margin-top: 15px;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #666;
+}
+
+.rfu-ai1wm-technical-data>div {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.rfu-ai1wm-technical-data strong {
+    color: #2271b1;
+    font-weight: 600;
+}
+
+/* Message Styles */
+.rfu-ai1wm-message {
+    margin: 20px 0;
+    padding: 12px 15px;
+    border-radius: 4px;
+    border-left: 4px solid;
+}
+
+.rfu-ai1wm-message.success {
+    background: #ecf7ed;
+    border-color: #46b450;
+    color: #2c662d;
+}
+
+.rfu-ai1wm-message.error {
+    background: #fcf0f1;
+    border-color: #dc3232;
+    color: #761919;
+}
+
+.rfu-ai1wm-message.info {
+    background: #f0f6fc;
+    border-color: #2271b1;
+    color: #135e96;
+}
+
+/* Form Styles */
+#source_url {
+    width: 100%;
+    max-width: 600px;
+}
+
+#rfu-ai1wm-submit {
+    font-size: 14px;
+    height: auto;
+    padding: 8px 20px;
+}
+
+#rfu-ai1wm-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Loading Spinner */
+.rfu-ai1wm-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 0.8s linear infinite;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+    .rfu-ai1wm-wrap {
+        margin: 10px 10px 0 0;
+    }
+
+    .rfu-ai1wm-card-body {
+        padding: 15px;
+    }
+
+    .rfu-ai1wm-progress-text {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    #source_url {
+        max-width: 100%;
+    }
+
+    .rfu-ai1wm-technical-data>div {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+}

@@ -12,6 +12,9 @@ Instead of manually downloading large backup files to your computer and then re-
 
 - ✅ Upload files from any publicly accessible URL
 - ✅ Real-time progress tracking with visual progress bar
+- ✅ Memory-efficient 512KB chunked processing
+- ✅ Enhanced UI showing speed, ETA, and time remaining
+- ✅ Comprehensive debugging with console.log
 - ✅ Automatic file naming from source URL
 - ✅ Works with any file type (designed for .wpress backups)
 - ✅ Clean, user-friendly admin interface
@@ -21,26 +24,32 @@ Instead of manually downloading large backup files to your computer and then re-
 
 ## Installation
 
-### Manual Installation
+### Method 1: Download from GitHub
+
+1. Go to [Releases](https://github.com/amartadey/Remote-File-Uploader-AI1WM/releases)
+2. Download the latest `remote-file-uploader-ai1wm.zip`
+3. In WordPress admin, go to **Plugins → Add New → Upload Plugin**
+4. Choose the downloaded ZIP file and click **Install Now**
+5. Click **Activate Plugin**
+6. Navigate to **Tools → Remote File Uploader** to use the plugin
+
+### Method 2: Manual Installation
 
 1. Download the plugin files
 2. Upload the `remote-file-uploader-ai1wm` folder to `/wp-content/plugins/`
 3. Activate the plugin through the 'Plugins' menu in WordPress
-4. Navigate to **Tools > Remote File Uploader** to use the plugin
-
-### Via WordPress Admin
-
-1. Go to **Plugins > Add New**
-2. Search for "Remote File Uploader for AI1WM"
-3. Click **Install Now** and then **Activate**
-4. Navigate to **Tools > Remote File Uploader** to use the plugin
+4. Navigate to **Tools → Remote File Uploader** to use the plugin
 
 ## Usage
 
-1. Navigate to **Tools > Remote File Uploader** in your WordPress admin
+1. Navigate to **Tools → Remote File Uploader** in your WordPress admin
 2. Enter the full URL of your backup file in the "Remote File URL" field
 3. Click **Start Upload**
-4. Monitor the real-time progress bar
+4. Monitor the real-time progress bar with technical data:
+   - Download speed
+   - Time remaining (ETA)
+   - Elapsed time
+   - File size information
 5. Once complete, the file will be available in All-in-One WP Migration for restoration
 
 ## Requirements
@@ -65,11 +74,19 @@ remote-file-uploader-ai1wm/
 ├── languages/
 │   └── (translation files)
 ├── remote-file-uploader-ai1wm.php
+├── uninstall.php
 ├── readme.txt
 └── README.md
 ```
 
 ## Technical Details
+
+### Memory Efficiency
+
+- **Buffer Size:** 512KB (524,288 bytes) for chunked processing
+- **Memory Limit:** 512MB (configurable)
+- **Execution Time:** Unlimited for large files
+- **Progress Updates:** Every 0.5 seconds
 
 ### Security Features
 
@@ -82,20 +99,17 @@ remote-file-uploader-ai1wm/
 
 1. User submits a remote URL via the admin interface
 2. Plugin validates the URL and checks permissions
-3. cURL downloads the file with progress tracking
-4. Progress is stored in a JSON file and polled via AJAX
+3. cURL downloads the file with 512KB chunked processing
+4. Progress is tracked with speed and ETA calculations
 5. File is saved to `wp-content/ai1wm-backups` directory
 6. Success/error message is displayed to the user
 
-### Hooks and Filters
+### Debugging
 
-The plugin uses standard WordPress hooks:
-
-- `admin_menu` - Adds the admin menu page
-- `admin_enqueue_scripts` - Enqueues CSS and JavaScript
-- `wp_ajax_rfu_ai1wm_upload_file` - Handles file upload
-- `wp_ajax_rfu_ai1wm_get_progress` - Returns upload progress
-- `plugins_loaded` - Loads text domain for translations
+The plugin includes comprehensive debugging:
+- **Browser Console:** All actions logged with `RFU AI1WM:` prefix
+- **Server Logs:** Progress logged to WordPress debug.log
+- **Technical UI:** Real-time display of speed, ETA, and file size
 
 ## FAQ
 
@@ -127,6 +141,13 @@ The plugin is licensed under GPL v2 or later, consistent with WordPress licensin
 
 ## Changelog
 
+### 1.0.1 (2026-01-16)
+- Implemented memory-efficient 512KB chunked processing
+- Added enhanced UI with speed, ETA, and time remaining
+- Comprehensive console.log debugging throughout
+- Fixed WordPress cron reliability issues
+- Direct download approach for better performance
+
 ### 1.0.0
 - Initial release
 - Remote URL upload functionality
@@ -136,7 +157,9 @@ The plugin is licensed under GPL v2 or later, consistent with WordPress licensin
 
 ## Support
 
-For issues, questions, or feature requests, please use the plugin's support forum or contact the developer.
+For issues, questions, or feature requests:
+- **GitHub Issues:** [Report an issue](https://github.com/amartadey/Remote-File-Uploader-AI1WM/issues)
+- **GitHub Discussions:** [Ask a question](https://github.com/amartadey/Remote-File-Uploader-AI1WM/discussions)
 
 ## License
 
@@ -155,6 +178,10 @@ GNU General Public License for more details.
 ```
 
 ## Credits
+
+**Author:** Amarta Dey  
+**Website:** [amartadey.com](https://amartadey.com)  
+**Plugin Page:** [GitHub Pages](https://amartadey.github.io/Remote-File-Uploader-AI1WM/)
 
 Developed as an independent companion tool for All-in-One WP Migration users.
 
