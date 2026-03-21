@@ -3,7 +3,7 @@
  * Plugin Name: Remote File Uploader for AI1WM
  * Plugin URI: https://amartadey.github.io/Remote-File-Uploader-AI1WM/
  * Description: Upload backup files from remote URLs directly to All-in-One WP Migration backups folder. Compatible with AI1WM.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Amarta Dey
  * Author URI: https://amartadey.com
  * License: GPL v2 or later
@@ -72,23 +72,62 @@ class Remote_File_Uploader_AI1WM {
     }
     
     /**
+     * Detect if All-in-One WP Migration is active.
+     *
+     * AI1WM has changed its main class name across versions and some builds use
+     * an autoloader, making class_exists() alone unreliable. We check multiple
+     * signals so detection works regardless of version.
+     */
+    public function is_ai1wm_active() {
+        // Constants defined in every AI1WM version at plugin boot
+        if (defined('AI1WM_PLUGIN_BASENAME') || defined('AI1WM_BACKUPS_NAME')) {
+            return true;
+        }
+        // Class names used across different AI1WM versions
+        foreach (array('Ai1wm_Main', 'Ai1wm_Main_Controller', 'Ai1wm') as $class) {
+            if (class_exists($class, false)) { // false = don't trigger autoload
+                return true;
+            }
+        }
+        // Setup function present in some versions
+        if (function_exists('ai1wm_setup')) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * Add admin menu
      */
     public function add_admin_menu() {
-        add_management_page(
-            __('Remote File Uploader for AI1WM', 'remote-file-uploader-ai1wm'),
-            __('Remote File Uploader', 'remote-file-uploader-ai1wm'),
-            'manage_options',
-            'remote-file-uploader-ai1wm',
-            array($this, 'render_admin_page')
-        );
+        // If All-in-One WP Migration is active, appear under its menu
+        if ($this->is_ai1wm_active()) {
+            add_submenu_page(
+                'ai1wm_export',
+                __('Remote File Uploader', 'remote-file-uploader-ai1wm'),
+                __('Remote Upload', 'remote-file-uploader-ai1wm'),
+                'manage_options',
+                'remote-file-uploader-ai1wm',
+                array($this, 'render_admin_page')
+            );
+        } else {
+            // Fall back to Tools menu when AI1WM is not installed
+            add_management_page(
+                __('Remote File Uploader for AI1WM', 'remote-file-uploader-ai1wm'),
+                __('Remote File Uploader', 'remote-file-uploader-ai1wm'),
+                'manage_options',
+                'remote-file-uploader-ai1wm',
+                array($this, 'render_admin_page')
+            );
+        }
     }
     
     /**
      * Enqueue admin scripts and styles
      */
     public function enqueue_admin_scripts($hook) {
-        if ('tools_page_remote-file-uploader-ai1wm' !== $hook) {
+        // Use strpos so the check works regardless of which parent menu is used
+        if (strpos($hook, 'remote-file-uploader-ai1wm') === false) {
             return;
         }
         
@@ -107,13 +146,22 @@ class Remote_File_Uploader_AI1WM {
             true
         );
         
+        // Server environment info passed to JS
+        $backup_dir   = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'ai1wm-backups';
+        $free_bytes   = function_exists('disk_free_space') ? @disk_free_space($backup_dir) : false;
+        $ai1wm_active = $this->is_ai1wm_active();
+        
         wp_localize_script('rfu-ai1wm-admin', 'rfuAi1wm', array(
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('rfu_ai1wm_nonce'),
+            'ajax_url'       => admin_url('admin-ajax.php'),
+            'nonce'          => wp_create_nonce('rfu_ai1wm_nonce'),
+            'backup_dir'     => $backup_dir,
+            'free_disk'      => $free_bytes !== false ? $free_bytes : null,
+            'ai1wm_active'   => $ai1wm_active,
+            'ai1wm_restore_url' => $ai1wm_active ? admin_url('admin.php?page=ai1wm_export') : '',
             'strings' => array(
                 'uploading' => __('Uploading...', 'remote-file-uploader-ai1wm'),
-                'success' => __('File uploaded successfully!', 'remote-file-uploader-ai1wm'),
-                'error' => __('An error occurred. Please try again.', 'remote-file-uploader-ai1wm'),
+                'success'   => __('File uploaded successfully!', 'remote-file-uploader-ai1wm'),
+                'error'     => __('An error occurred. Please try again.', 'remote-file-uploader-ai1wm'),
             )
         ));
     }
@@ -153,6 +201,13 @@ class Remote_File_Uploader_AI1WM {
             wp_send_json_error(array('message' => __('Invalid URL format.', 'remote-file-uploader-ai1wm')));
         }
         
+        // Auto-upgrade http:// to https:// to avoid redirect-related 404s on SSL-enforced sites
+        if (strpos($source_url, 'http://') === 0) {
+            $https_url = 'https://' . substr($source_url, 7);
+            error_log('RFU AI1WM: Upgrading URL from http to https: ' . $https_url);
+            $source_url = $https_url;
+        }
+        
         error_log('RFU AI1WM: Starting download from: ' . $source_url);
         
         // Get AI1WM backup directory
@@ -189,11 +244,6 @@ class Remote_File_Uploader_AI1WM {
         
         error_log('RFU AI1WM: Memory limit set to: ' . ini_get('memory_limit'));
         error_log('RFU AI1WM: Max execution time: ' . ini_get('max_execution_time'));
-        
-        // Disable output buffering to prevent timeouts
-        if (ob_get_level()) {
-            ob_end_clean();
-        }
         
         // Start the download process directly (not in background)
         $result = $this->download_remote_file($source_url, $destination_path, $filename);
@@ -353,60 +403,56 @@ class Remote_File_Uploader_AI1WM {
         }
         
         // Set cURL options for chunked download (512KB buffer)
-        curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 0);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-        curl_setopt($ch, CURLOPT_NOPROGRESS, false);
+        curl_setopt($ch, CURLOPT_NOPROGRESS, true); // Keep NOPROGRESS true; use WRITEFUNCTION for progress tracking
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_BUFFERSIZE, 524288); // 512KB chunks for memory efficiency
+        curl_setopt($ch, CURLOPT_ENCODING, '');       // Enable automatic decompression (sets Accept-Encoding automatically)
         
         error_log('RFU AI1WM: cURL buffer size set to 512KB for memory-efficient chunked processing');
         
         // Add User-Agent and headers to prevent HTTP 418 and anti-bot blocking
+        // Note: Do NOT manually set Accept-Encoding here — CURLOPT_ENCODING already handles it
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'Accept-Language: en-US,en;q=0.9',
-            'Accept-Encoding: gzip, deflate, br',
             'Connection: keep-alive',
             'Upgrade-Insecure-Requests: 1'
         ));
-        curl_setopt($ch, CURLOPT_ENCODING, ''); // Enable automatic decompression
         
-        // Progress callback with speed and ETA calculation
+        // Use WRITEFUNCTION instead of PROGRESSFUNCTION for broader server compatibility.
+        // CURLOPT_PROGRESSFUNCTION + CURLOPT_FILE can conflict on some PHP/cURL builds causing 500 errors.
         $last_update_time = $start_time;
-        $last_downloaded = 0;
+        $downloaded_bytes  = 0;
+        $self = $this; // Capture $this explicitly for PHP 5.x compatibility
         
-        curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, function($resource, $download_size, $downloaded, $upload_size, $uploaded) use ($progress_file, $filename, $start_time, &$last_update_time, &$last_downloaded) {
-            if ($download_size > 0) {
-                $current_time = microtime(true);
-                $progress = round(($downloaded / $download_size) * 100, 2);
+        curl_setopt($ch, CURLOPT_WRITEFUNCTION, function($ch_handle, $chunk) use ($fp, $progress_file, $filename, $start_time, &$last_update_time, &$downloaded_bytes, $self) {
+            $chunk_len = strlen($chunk);
+            fwrite($fp, $chunk);
+            $downloaded_bytes += $chunk_len;
+            
+            $current_time = microtime(true);
+            
+            // Update progress every 0.5 seconds to avoid too many file writes
+            if ($current_time - $last_update_time >= 0.5) {
+                $elapsed_time = max($current_time - $start_time, 0.001);
+                $speed = $downloaded_bytes / $elapsed_time;
                 
-                // Calculate speed (bytes per second)
-                $elapsed_time = $current_time - $start_time;
-                $speed = $elapsed_time > 0 ? $downloaded / $elapsed_time : 0;
+                // We don't know total size here, so report bytes downloaded only
+                $self->update_progress($progress_file, 0, $downloaded_bytes, 0, 'downloading', $filename, '', $start_time, $speed, 0);
+                $last_update_time = $current_time;
                 
-                // Calculate ETA (seconds remaining)
-                $remaining_bytes = $download_size - $downloaded;
-                $eta = $speed > 0 ? $remaining_bytes / $speed : 0;
-                
-                // Update progress every 0.5 seconds to avoid too many writes
-                if ($current_time - $last_update_time >= 0.5 || $downloaded == $download_size) {
-                    $this->update_progress($progress_file, $progress, $downloaded, $download_size, 'downloading', $filename, '', $start_time, $speed, $eta);
-                    $last_update_time = $current_time;
-                    $last_downloaded = $downloaded;
-                    
-                    error_log(sprintf('RFU AI1WM: Progress: %.2f%% (%s / %s) Speed: %s/s ETA: %s', 
-                        $progress, 
-                        $this->format_bytes($downloaded), 
-                        $this->format_bytes($download_size),
-                        $this->format_bytes($speed),
-                        $this->format_time($eta)
-                    ));
-                }
+                error_log(sprintf('RFU AI1WM: Downloaded: %s Speed: %s/s',
+                    $self->format_bytes($downloaded_bytes),
+                    $self->format_bytes($speed)
+                ));
             }
+            
+            return $chunk_len; // MUST return chunk length, otherwise cURL aborts
         });
         
         error_log('RFU AI1WM: Starting cURL execution');
@@ -435,8 +481,28 @@ class Remote_File_Uploader_AI1WM {
         if ($http_code !== 200) {
             @unlink($destination_path);
             error_log('RFU AI1WM: HTTP error: ' . $http_code);
-            $this->update_progress($progress_file, 0, 0, 0, 'error', $filename, sprintf(__('HTTP Error: %d', 'remote-file-uploader-ai1wm'), $http_code));
-            return new WP_Error('http_error', sprintf(__('HTTP Error: %d', 'remote-file-uploader-ai1wm'), $http_code));
+            
+            // Provide a clear, actionable error message based on HTTP status code
+            switch ($http_code) {
+                case 404:
+                    $error_msg = __('Remote file not found (404). The file does not exist at the given URL. Please verify the URL is correct and the file is publicly accessible by opening it directly in a browser.', 'remote-file-uploader-ai1wm');
+                    break;
+                case 403:
+                    $error_msg = __('Access denied (403). The server refused access to the file. The directory may be protected or the file permissions are restricted.', 'remote-file-uploader-ai1wm');
+                    break;
+                case 401:
+                    $error_msg = __('Authentication required (401). The file requires a username and password to access.', 'remote-file-uploader-ai1wm');
+                    break;
+                case 503:
+                case 502:
+                    $error_msg = sprintf(__('Remote server temporarily unavailable (%d). Please try again later.', 'remote-file-uploader-ai1wm'), $http_code);
+                    break;
+                default:
+                    $error_msg = sprintf(__('Remote server returned HTTP %d. Please verify the URL is accessible.', 'remote-file-uploader-ai1wm'), $http_code);
+            }
+            
+            $this->update_progress($progress_file, 0, 0, 0, 'error', $filename, $error_msg);
+            return new WP_Error('http_error', $error_msg);
         }
         
         $final_size = filesize($destination_path);

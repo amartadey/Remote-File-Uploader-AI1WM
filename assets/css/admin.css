@@ -1,46 +1,150 @@
 /**
  * Admin Styles for Remote File Uploader for AI1WM
+ * Modern redesign with vibrant colors and micro-animations
  */
+
+/* ── Google Font ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ── Base ────────────────────────────────────────────────── */
+.rfu-ai1wm-wrap,
+.rfu-ai1wm-wrap * {
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
 
 .rfu-ai1wm-wrap {
     margin: 20px 20px 0 0;
 }
 
 .rfu-ai1wm-container {
-    max-width: 1200px;
-    margin-top: 20px;
+    max-width: 1100px;
+    margin-top: 16px;
 }
 
+/* ── Hero Banner ─────────────────────────────────────────── */
+.rfu-ai1wm-hero {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #06b6d4 100%);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.35);
+}
+
+.rfu-ai1wm-hero-icon {
+    font-size: 42px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.rfu-ai1wm-hero-text h2 {
+    margin: 0 0 4px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.rfu-ai1wm-hero-text p {
+    margin: 0;
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.5;
+}
+
+/* ── Status Bar ──────────────────────────────────────────── */
+.rfu-ai1wm-status-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.rfu-ai1wm-status-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    border: 1px solid transparent;
+}
+
+.status-ok {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #bbf7d0;
+}
+
+.status-warn {
+    background: #fef9c3;
+    color: #854d0e;
+    border-color: #fde68a;
+}
+
+.status-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+
+.rfu-ai1wm-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-ok   .rfu-ai1wm-status-dot { background: #16a34a; }
+.status-warn .rfu-ai1wm-status-dot { background: #d97706; }
+.status-error .rfu-ai1wm-status-dot { background: #dc2626; }
+
+/* ── Card ────────────────────────────────────────────────── */
 .rfu-ai1wm-card {
     background: #fff;
-    border: 1px solid #ccd0d4;
-    border-radius: 4px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
     margin-bottom: 20px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+    overflow: hidden;
 }
 
 .rfu-ai1wm-card-header {
-    padding: 15px 20px;
-    border-bottom: 1px solid #ccd0d4;
-    background: #f9f9f9;
+    padding: 16px 24px;
+    border-bottom: 1px solid #f3f4f6;
+    background: linear-gradient(to right, #f8fafc, #f1f5f9);
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .rfu-ai1wm-card-header h2 {
     margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.rfu-ai1wm-card-header .header-icon {
     font-size: 18px;
-    font-weight: 600;
-    color: #23282d;
 }
 
 .rfu-ai1wm-card-body {
-    padding: 20px;
+    padding: 24px;
 }
 
 .rfu-ai1wm-card-body h3 {
-    margin-top: 20px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    font-weight: 600;
+    margin: 20px 0 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .rfu-ai1wm-card-body h3:first-child {
@@ -50,214 +154,429 @@
 .rfu-ai1wm-card-body ul,
 .rfu-ai1wm-card-body ol {
     margin-left: 20px;
+    color: #4b5563;
 }
 
 .rfu-ai1wm-card-body li {
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    line-height: 1.6;
 }
 
 .rfu-ai1wm-card-body code {
-    background: #f0f0f1;
-    padding: 3px 6px;
-    border-radius: 3px;
-    font-size: 13px;
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #1e40af;
+    border: 1px solid #e2e8f0;
 }
 
+/* ── Info card variant ───────────────────────────────────── */
 .rfu-ai1wm-info-card {
-    background: #f0f6fc;
-    border-color: #c3e6ff;
+    background: #f8faff;
+    border-color: #dbeafe;
 }
 
 .rfu-ai1wm-info-card .rfu-ai1wm-card-header {
-    background: #e5f2ff;
-    border-color: #c3e6ff;
+    background: linear-gradient(to right, #eff6ff, #dbeafe);
+    border-color: #bfdbfe;
 }
 
-/* Progress Bar Styles */
-.rfu-ai1wm-progress-container {
-    margin: 20px 0;
-    padding: 20px;
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-.rfu-ai1wm-progress-bar-wrapper {
-    margin-bottom: 15px;
-}
-
-.rfu-ai1wm-progress-bar {
-    width: 100%;
-    height: 30px;
-    background: #e0e0e0;
-    border-radius: 15px;
-    overflow: hidden;
-    position: relative;
-}
-
-.rfu-ai1wm-progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #2271b1 0%, #135e96 100%);
-    border-radius: 15px;
-    width: 0%;
-    transition: width 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.rfu-ai1wm-progress-bar-fill::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background: linear-gradient(90deg,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0.3) 50%,
-            rgba(255, 255, 255, 0) 100%);
-    animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-    0% {
-        transform: translateX(-100%);
-    }
-
-    100% {
-        transform: translateX(100%);
-    }
-}
-
-.rfu-ai1wm-progress-text {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    font-size: 14px;
-    color: #555;
-}
-
-.rfu-ai1wm-progress-percentage {
-    font-weight: 600;
-    color: #2271b1;
-}
-
-.rfu-ai1wm-progress-size {
-    font-family: monospace;
-}
-
-.rfu-ai1wm-progress-status {
-    margin: 10px 0 0 0;
-    font-size: 14px;
-    color: #666;
-    font-style: italic;
-}
-
-/* Technical Data Display */
-.rfu-ai1wm-technical-data {
-    margin-top: 15px;
-    padding: 12px;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 12px;
-    color: #666;
-}
-
-.rfu-ai1wm-technical-data>div {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-}
-
-.rfu-ai1wm-technical-data strong {
-    color: #2271b1;
-    font-weight: 600;
-}
-
-/* Message Styles */
-.rfu-ai1wm-message {
-    margin: 20px 0;
-    padding: 12px 15px;
-    border-radius: 4px;
-    border-left: 4px solid;
-}
-
-.rfu-ai1wm-message.success {
-    background: #ecf7ed;
-    border-color: #46b450;
-    color: #2c662d;
-}
-
-.rfu-ai1wm-message.error {
-    background: #fcf0f1;
-    border-color: #dc3232;
-    color: #761919;
-}
-
-.rfu-ai1wm-message.info {
-    background: #f0f6fc;
-    border-color: #2271b1;
-    color: #135e96;
-}
-
-/* Form Styles */
+/* ── Form elements ───────────────────────────────────────── */
 #source_url {
     width: 100%;
-    max-width: 600px;
+    max-width: 620px;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
 }
 
+#source_url:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+
+.description {
+    font-size: 13px !important;
+    color: #6b7280 !important;
+    margin-top: 6px !important;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
 #rfu-ai1wm-submit {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
     font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(59,130,246,0.4);
     height: auto;
-    padding: 8px 20px;
+}
+
+#rfu-ai1wm-submit:hover:not(:disabled) {
+    opacity: 0.92;
+    box-shadow: 0 4px 14px rgba(59,130,246,0.5);
+    transform: translateY(-1px);
 }
 
 #rfu-ai1wm-submit:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+    transform: none;
 }
 
-/* Loading Spinner */
+#rfu-ai1wm-cancel {
+    background: #fff;
+    color: #6b7280;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+    height: auto;
+}
+
+#rfu-ai1wm-cancel:hover {
+    border-color: #ef4444;
+    color: #dc2626;
+}
+
+/* ── Progress Container ──────────────────────────────────── */
+.rfu-ai1wm-progress-container {
+    margin: 24px 0 0;
+    padding: 20px;
+    background: linear-gradient(to bottom, #f8faff, #eff6ff);
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+}
+
+/* ── Progress Bar ────────────────────────────────────────── */
+.rfu-ai1wm-progress-bar-wrapper {
+    margin-bottom: 12px;
+}
+
+.rfu-ai1wm-progress-bar {
+    width: 100%;
+    height: 24px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.rfu-ai1wm-progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1e40af 0%, #3b82f6 60%, #06b6d4 100%);
+    border-radius: 999px;
+    width: 0%;
+    transition: width 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Shimmer overlay on known-size fill */
+.rfu-ai1wm-progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(90deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.35) 50%,
+        rgba(255,255,255,0) 100%);
+    animation: rfu-shimmer 2s infinite;
+}
+
+@keyframes rfu-shimmer {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+}
+
+/* ── Indeterminate / Unknown-size mode ───────────────────── */
+.rfu-ai1wm-progress-bar-fill.indeterminate {
+    width: 100% !important;
+    background: linear-gradient(90deg, #1e40af 0%, #3b82f6 50%, #06b6d4 100%);
+    background-size: 200% 100%;
+    animation: rfu-flow 2s ease-in-out infinite alternate;
+    transition: none;
+}
+
+/* Override the ::after shimmer with a separate travelling highlight */
+.rfu-ai1wm-progress-bar-fill.indeterminate::after {
+    background: linear-gradient(90deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.55) 50%,
+        rgba(255,255,255,0) 100%);
+    animation: rfu-sweep 1.5s ease-in-out infinite;
+}
+
+@keyframes rfu-flow {
+    0%   { background-position: 0% 0%; }
+    100% { background-position: 100% 0%; }
+}
+
+@keyframes rfu-sweep {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+}
+
+/* ── Progress Text Row ───────────────────────────────────── */
+.rfu-ai1wm-progress-text {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.rfu-ai1wm-progress-percentage {
+    font-weight: 700;
+    font-size: 15px;
+    color: #1e40af;
+    min-width: 60px;
+}
+
+.rfu-ai1wm-progress-size {
+    font-family: 'Courier New', monospace;
+    color: #4b5563;
+    background: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #e5e7eb;
+    font-size: 12px;
+}
+
+.rfu-ai1wm-progress-speed {
+    font-family: 'Courier New', monospace;
+    color: #fff;
+    background: linear-gradient(135deg, #059669, #10b981);
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.rfu-ai1wm-progress-elapsed {
+    font-family: 'Courier New', monospace;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.rfu-ai1wm-progress-status {
+    margin: 10px 0 0;
+    font-size: 13px;
+    color: #1e40af;
+    font-weight: 600;
+    font-style: normal;
+}
+
+/* ── Technical Data Grid ─────────────────────────────────── */
+.rfu-ai1wm-technical-data {
+    margin-top: 14px;
+    padding: 14px;
+    background: rgba(255,255,255,0.8);
+    border: 1px solid #dbeafe;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #374151;
+}
+
+.rfu-ai1wm-technical-data strong {
+    color: #1e40af;
+    font-weight: 600;
+}
+
+/* ── Messages ────────────────────────────────────────────── */
+.rfu-ai1wm-message {
+    margin: 16px 0 0;
+    padding: 14px 18px;
+    border-radius: 8px;
+    border-left: 4px solid;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.rfu-ai1wm-message.success {
+    background: #f0fdf4;
+    border-color: #22c55e;
+    color: #14532d;
+}
+
+.rfu-ai1wm-message.error {
+    background: #fef2f2;
+    border-color: #ef4444;
+    color: #7f1d1d;
+}
+
+.rfu-ai1wm-message.info {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    color: #1e3a8a;
+}
+
+/* ── Restore Action ──────────────────────────────────────── */
+.rfu-ai1wm-restore-action {
+    margin: 16px 0 0;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 1px solid #86efac;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #14532d;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.rfu-ai1wm-restore-action .restore-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.rfu-ai1wm-restore-action a.button,
+.rfu-ai1wm-restore-action a.button-primary {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(22,163,74,0.35);
+    transition: opacity 0.2s;
+    display: inline-block;
+    line-height: normal;
+    height: auto;
+    margin-left: auto;
+}
+
+.rfu-ai1wm-restore-action a.button:hover {
+    opacity: 0.9;
+    box-shadow: 0 4px 12px rgba(22,163,74,0.45);
+}
+
+/* ── Stall Warning ───────────────────────────────────────── */
+.rfu-ai1wm-stall-warning {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: #fffbeb;
+    border: 1px solid #fbbf24;
+    border-left-width: 4px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #78350f;
+    line-height: 1.6;
+}
+
+/* ── URL Hint ────────────────────────────────────────────── */
+.rfu-ai1wm-url-hint {
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.rfu-ai1wm-url-hint.hint-warn {
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    color: #78350f;
+}
+
+.rfu-ai1wm-url-hint.hint-error {
+    background: #fef2f2;
+    border-left: 3px solid #ef4444;
+    color: #7f1d1d;
+}
+
+/* ── Server Info Table ───────────────────────────────────── */
+.rfu-ai1wm-server-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+.rfu-ai1wm-server-table tr {
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.rfu-ai1wm-server-table tr:last-child {
+    border-bottom: none;
+}
+
+.rfu-ai1wm-server-table td {
+    padding: 8px 10px;
+    vertical-align: top;
+}
+
+.rfu-ai1wm-server-table td:first-child {
+    font-weight: 600;
+    color: #374151;
+    width: 160px;
+    white-space: nowrap;
+}
+
+/* ── Info Grid ───────────────────────────────────────────── */
+.rfu-ai1wm-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+
+/* ── Spinner ─────────────────────────────────────────────── */
 .rfu-ai1wm-spinner {
     display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255,255,255,0.35);
     border-radius: 50%;
     border-top-color: #fff;
-    animation: spin 0.8s linear infinite;
+    animation: rfu-spin 0.7s linear infinite;
     margin-left: 8px;
     vertical-align: middle;
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
+@keyframes rfu-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Disk quota note ─────────────────────────────────────── */
+.rfu-disk-note {
+    font-size: 11px;
+    color: #9ca3af;
+    font-style: italic;
+    margin-top: 2px;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media screen and (max-width: 900px) {
+    .rfu-ai1wm-info-grid {
+        grid-template-columns: 1fr;
     }
 }
 
-/* Responsive */
 @media screen and (max-width: 782px) {
-    .rfu-ai1wm-wrap {
-        margin: 10px 10px 0 0;
-    }
-
-    .rfu-ai1wm-card-body {
-        padding: 15px;
-    }
-
-    .rfu-ai1wm-progress-text {
-        flex-direction: column;
-        gap: 5px;
-    }
-
-    #source_url {
-        max-width: 100%;
-    }
-
-    .rfu-ai1wm-technical-data>div {
-        grid-template-columns: 1fr;
-        gap: 5px;
-    }
+    .rfu-ai1wm-wrap { margin: 10px 10px 0 0; }
+    .rfu-ai1wm-card-body { padding: 16px; }
+    .rfu-ai1wm-progress-text { flex-direction: column; gap: 6px; }
+    #source_url { max-width: 100%; }
+    .rfu-ai1wm-hero { flex-direction: column; text-align: center; }
+    .rfu-ai1wm-status-bar { gap: 6px; }
+    .rfu-ai1wm-restore-action { flex-direction: column; align-items: flex-start; }
+    .rfu-ai1wm-restore-action a { margin-left: 0; }
 }
